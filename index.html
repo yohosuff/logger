@@ -1,48 +1,57 @@
-<textarea
-  autofocus
-  rows="10"
-  cols="50"
-></textarea>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      textarea {
+        width: 100%;
+        height: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea autofocus></textarea>
+    
+    <button id="insert_timestamp">Insert Timestamp</button>
+    <button id="test">Test</button>
+    
+    <script>
+    
+      function getTimestamp() {
+        const date = new Date();
+        date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+        return date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+      }
+    
+      const testButton = document.querySelector('#test');
+      testButton.onclick = () => {
+        const date = new Date();
+        date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+        console.log(date.toISOString());
+      };
+    
+      const textArea = document.querySelector('textarea');
+      textArea.value = localStorage.getItem('text');
+      textArea.oninput = () => localStorage.setItem('text', textArea.value);
+    
+      const insertTimestampButton = document.querySelector('#insert_timestamp');
+      insertTimestampButton.onclick = () => {
+        const timestamp = getTimestamp();
+        const prompt = `${timestamp} - `;
+    
+        const textAreaCursorPosition = textArea.selectionStart;
+        const textAreaValue = textArea.value;
+        const textAreaValueBeforeCursor = textAreaValue.substring(0, textAreaCursorPosition);
+        const textAreaValueAfterCursor = textAreaValue.substring(textAreaCursorPosition, textAreaValue.length);
+    
+        textArea.value = textAreaValueBeforeCursor + prompt + textAreaValueAfterCursor;
+    
+        textArea.focus();
+        textArea.selectionStart = textAreaCursorPosition + prompt.length;
+        textArea.selectionEnd = textAreaCursorPosition + prompt.length;
+        localStorage.setItem('text', textArea.value);
+      };
+    </script>
+  </body>
+</html>
 
-<div></div>
 
-<button id="insert_timestamp">Insert Timestamp</button>
-<button id="test">Test</button>
-
-<script>
-
-  function getTimestamp() {
-    const date = new Date();
-    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-    return date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
-  }
-
-  const testButton = document.querySelector('#test');
-  testButton.onclick = () => {
-    const date = new Date();
-    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-    console.log(date.toISOString());
-  };
-
-  const textArea = document.querySelector('textarea');
-  textArea.value = localStorage.getItem('text');
-  textArea.oninput = () => localStorage.setItem('text', textArea.value);
-
-  const insertTimestampButton = document.querySelector('#insert_timestamp');
-  insertTimestampButton.onclick = () => {
-    const timestamp = getTimestamp();
-    const prompt = `${timestamp} - `;
-
-    const textAreaCursorPosition = textArea.selectionStart;
-    const textAreaValue = textArea.value;
-    const textAreaValueBeforeCursor = textAreaValue.substring(0, textAreaCursorPosition);
-    const textAreaValueAfterCursor = textAreaValue.substring(textAreaCursorPosition, textAreaValue.length);
-
-    textArea.value = textAreaValueBeforeCursor + prompt + textAreaValueAfterCursor;
-
-    textArea.focus();
-    textArea.selectionStart = textAreaCursorPosition + prompt.length;
-    textArea.selectionEnd = textAreaCursorPosition + prompt.length;
-    localStorage.setItem('text', textArea.value);
-  };
-</script>
