@@ -14,6 +14,7 @@
     
     <button id="insert_timestamp">Insert Timestamp</button>
     <button id="jump_to_end">Jump to End</button>
+    <button id="delete_line">Delete Line</button>
     
     <script>
     
@@ -51,8 +52,22 @@
         textArea.selectionStart = textArea.value.length;
         textArea.selectionEnd = textArea.value.length;
       };
+
+      const deleteLineButton = document.querySelector('#delete_line');
+      deleteLineButton.onclick = () => {
+        const textAreaCursorPosition = textArea.selectionStart;
+        const textAreaValue = textArea.value;
+        const textAreaValueBeforeCursor = textAreaValue.substring(0, textAreaCursorPosition);
+        const textAreaValueAfterCursor = textAreaValue.substring(textAreaCursorPosition, textAreaValue.length);
+        const textAreaValueBeforeCursorLines = textAreaValueBeforeCursor.split('\n');
+        const textAreaValueBeforeCursorLinesWithoutLastLine = textAreaValueBeforeCursorLines.slice(0, textAreaValueBeforeCursorLines.length - 1);
+        const textAreaValueBeforeCursorWithoutLastLine = textAreaValueBeforeCursorLinesWithoutLastLine.join('\n');
+        textArea.value = textAreaValueBeforeCursorWithoutLastLine + '\n' + textAreaValueAfterCursor;
+        textArea.focus();
+        textArea.selectionStart = textAreaValueBeforeCursorWithoutLastLine.length + 1;
+        textArea.selectionEnd = textAreaValueBeforeCursorWithoutLastLine.length + 1;
+        localStorage.setItem('text', textArea.value);
+      };
     </script>
   </body>
 </html>
-
-
