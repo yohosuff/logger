@@ -13,7 +13,7 @@
     <textarea autofocus></textarea>
     
     <button id="insert_timestamp">Insert Timestamp</button>
-    <button id="test">Test</button>
+    <button id="jump_to_end">Jump to End</button>
     
     <script>
     
@@ -22,13 +22,6 @@
         date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
         return date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
       }
-    
-      const testButton = document.querySelector('#test');
-      testButton.onclick = () => {
-        const date = new Date();
-        date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-        console.log(date.toISOString());
-      };
     
       const textArea = document.querySelector('textarea');
       textArea.value = localStorage.getItem('text');
@@ -50,6 +43,13 @@
         textArea.selectionStart = textAreaCursorPosition + prompt.length;
         textArea.selectionEnd = textAreaCursorPosition + prompt.length;
         localStorage.setItem('text', textArea.value);
+      };
+
+      const jumpToEndButton = document.querySelector('#jump_to_end');
+      jumpToEndButton.onclick = () => {
+        textArea.focus();
+        textArea.selectionStart = textArea.value.length;
+        textArea.selectionEnd = textArea.value.length;
       };
     </script>
   </body>
